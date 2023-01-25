@@ -5,7 +5,7 @@ University of Illinois at Urbana Champaign
 adammb4@illinois.edu
 8.17.2022
 
-This code contains a function which makes a list of relevant TCREZClimate model
+This code contains a function which makes a list of relevant CAP6 model
 classes for a list of run numbers. This is commonly used in Jupyter notebooks
 which generate figures, and helps make those slimmer and easier to read.
 
@@ -58,22 +58,13 @@ def make_class_instances(run_list):
 
         # import model params
         ra, eis, pref, growth, tech_chg, tech_scale, dam_func,\
-            baseline_num, tip_on, bs_premium, crra_on, d_unc, t_unc,\
-            d_var_mult, t_var_mult = data[i]
+            baseline_num, tip_on, bs_premium, d_unc, t_unc = data[i]
 
         baseline_num = int(baseline_num)
         dam_func = int(dam_func)
         tip_on = int(tip_on)
-        crra_on = int(crra_on)
         d_unc = int(d_unc)
         t_unc = int(t_unc)
-
-        # crra check
-        if crra_on:
-            if eis != 0.9:
-                ra = eis**(-1)
-            else:
-                eis = ra**(-1)
 
         # temporary tree model
         tmp_t = TreeModel(decision_times=[0, 10, 40, 80, 130, 180, 230],
@@ -85,7 +76,7 @@ def make_class_instances(run_list):
 
         # temporary climate class
         draws = 3 * 10**6
-        tmp_cl = BPWClimate(tmp_t, tmp_be, draws=draws, t_var_mult=t_var_mult)
+        tmp_cl = BPWClimate(tmp_t, tmp_be, draws=draws)
 
         # temporary damage class
         d_m = 0.01
@@ -98,8 +89,7 @@ def make_class_instances(run_list):
         damsim_filename = ''.join(["BPW_simulated_damages_df", str(dam_func),
                                    "_TP", str(tip_on), "_SSP",
                                    str(baseline_num), "_dunc", str(d_unc),
-                                   "_tunc", str(t_unc), "_dmult",
-                                   str(d_var_mult), "_tmult", str(t_var_mult)])
+                                   "_tunc", str(t_unc)])
 
         tmp_d.import_damages(file_name=damsim_filename)
 

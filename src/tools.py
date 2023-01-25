@@ -1,3 +1,14 @@
+"""Tools file for CAP6. 
+
+Adam Michael Bauer
+University of Illinois at Urbana Champaing
+adammb4@illinois.edu
+1..18.2023
+
+A set of tools used throughout CAP6. Many of these were originally
+written by the EZClimate team.
+"""
+
 import csv
 import io
 

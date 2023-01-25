@@ -13,7 +13,7 @@ as a template for other cost classes. The second is our cost class -- BPWCost
 import numpy as np
 from abc import ABCMeta, abstractmethod
 
-from src.storage_tree import BigStorageTree
+from cal.cost_cal import cost_cal_params
 
 class Cost(object, metaclass=ABCMeta):
     """Abstract Cost class for the EZ-Climate model.
@@ -79,19 +79,10 @@ class BPWCost(Cost):
                  cons_at_0, backstop_premium, no_free_lunch):
         self.tree = tree
         if no_free_lunch:
-            self.taus = [58.86058226462219, 58.8605820424876,
-                         58.860582004738724, 58.86058248081809,
-                         58.860581972135996]
-            self.powers = [1.831952215967607, 2.2930010323253702,
-                           2.7872590206143646, 2.382232052452577,
-                           2.916435234033552]
+            self.taus, self.powers = cost_cal_params['no-free-lunches']
         else:
-            self.taus = [27.50355316561843, 27.503553614159248,
-                        27.503553963318577, 27.503553813217213,
-                        27.503556976032684]
-            self.powers = [1.8864102504517255, 2.3611645411309974,
-                        2.8701152048906655, 2.4530481113692773,
-                        3.003131263293185]
+            self.taus, self.powers = cost_cal_params['main-specification']
+
         self.tau_0 = self.taus[baseline_num - 1]
         self.power = self.powers[baseline_num - 1]
         self.tech_const = tech_const

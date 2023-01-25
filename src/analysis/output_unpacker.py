@@ -1,7 +1,7 @@
 """Output unpacker class.
 
 This class makes a series of quantities of interest from the output files of a
-run of TCREZClimate. These can be used in the analysis Jupyter notebook to make
+run of CAP6. These can be used in the analysis Jupyter notebook to make
 figures to better understand model output and model inefficiencies.
 """
 
@@ -12,7 +12,7 @@ class OutputUnpacker:
     """Output Unpacker class.
 
     Class which contains various attributes and methods to represent the
-    approximate output of TCREZClimate.
+    approximate output of CAP6.
 
     Parameters
     ----------
@@ -23,7 +23,7 @@ class OutputUnpacker:
     _type: string
         "pickle" or "output", tells the class the type of the file of interest
     tree: `TreeModel` object
-        tree model used in the TCREZClimate model run
+        tree model used in the CAP6 model run
     emit_baseline: `EmissionBaseline` object
         emission baseline used in model run
     climate: `Climate` object
@@ -162,7 +162,7 @@ class OutputUnpacker:
     def _get_node_to_path(self, array):
         """Take an array in node notation and create an array in path notation.
 
-        In TCREZClimate, there are two ways to store output: in node notation
+        In CAP6, there are two ways to store output: in node notation
         or in path notation. This code takes an array in node notation (i.e.,
         an array with shape (tree.num_decision_nodes,)) and transforms it into
         an array in path notation (i.e., an array with shape (tree.num_periods,

@@ -5,8 +5,8 @@ University of Illinois at Urbana Champaign
 adammb4@illinois.edu
 3.15.2022
 
-This code contains the abstract class for damages within the TCREZClimate
-framework and its subclass which is used in TCREZClimate, DLWDamage.
+This code contains the abstract class for damages within the CAP6
+framework and its subclass which is used in CAP6, DLWDamage.
 """
 
 import sys
@@ -15,10 +15,11 @@ import numpy as np
 from abc import ABCMeta, abstractmethod
 
 from .damage_simulation import DamageSimulation
-from .tools import get_integral_var_ub, import_csv
+from .tools import import_csv
 
 class Damage(object, metaclass=ABCMeta):
-    """Abstract damage class for the EZ-Climate model.
+    """Abstract damage class for the Climate Asset Pricing 
+    model.
 
     Parameters
     ----------
@@ -64,8 +65,6 @@ class BPWDamage(Damage):
 
     Provides structure for calculating damages for a given mitigation and
     emission pathway.
-    This is adapted from DLWDamage which was used in Daniel et al., 2017.
-    https://doi.org/10.1073/pnas.1817444116
     
     Parameters
     ----------
@@ -126,7 +125,7 @@ class BPWDamage(Damage):
 
     def damage_simulation(self, filename="BPW_simulated_damages.csv",
                           save_simulation=True, dam_func=0, tip_on=True,
-                          d_unc=1, t_unc=1, d_var_mult=1.0):
+                          d_unc=1, t_unc=1):
         """Run damage simulation using `DamageSimulation` object.
 
         Parameters
@@ -161,7 +160,7 @@ class BPWDamage(Damage):
                               climate=self.climate, draws=self.draws,
                               mitigation_constants=self.mitigation_constants,
                               dam_func=dam_func, tip_on=tip_on,
-                              d_unc=d_unc, t_unc=t_unc, d_var_mult=d_var_mult)
+                              d_unc=d_unc, t_unc=t_unc)
 
         print("Starting damage simulation..")
         self.d = self.ds.simulate(write_to_file=save_simulation,

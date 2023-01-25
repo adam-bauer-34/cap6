@@ -6,7 +6,7 @@ adammb4@illinois.edu
 3.21.2022
 
 Utility class used for calculating the economic utility and related
-quantities in TCREZClimate. We implement Epstein-Zin preferences for
+quantities in CAP6. We implement Epstein-Zin preferences for
 our utility calculations below.
 """
 
@@ -17,10 +17,10 @@ from src.storage_tree import BigStorageTree, SmallStorageTree
 np.seterr(all='ignore')
 
 class EZUtility(object):
-    """Calculation of Epstein-Zin utility for the EZ-Climate model.
+    """Calculation of Epstein-Zin utility for the CAP6 model.
 
     The Epstein-Zin utility allows for different rates of substitution across
-    time and states. For specification see DLW-paper.
+    time and states. For specification see DLW-paper (2017) and BPW-paper (2023).
 
     Parameters
     ----------

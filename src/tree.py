@@ -1,20 +1,20 @@
-"""Tree Model class for TCREZClimate.
+"""Tree Model class for CAP6.
 
 Adam M. Bauer
 University of Illinios at Urbana Champaign
 adammb4@illinois.edu
 6.16.2022
 
-This code contains the Tree Model class for TCREZClimate. It contains numerous
+This code contains the Tree Model class for CAP6. It contains numerous
 useful attributes and methods relating to the tree model, which is at the
-foundation of TCREZClimate's financial model for CO2 price.
+foundation of CAP6's financial model for CO2 price.
 """
 
 import numpy as np
 import itertools as it
 
 class TreeModel(object):
-    """Tree model for the EZ-Climate model. It provides the structure of a
+    """Tree model for CAP6. It provides the structure of a
     non-recombining tree.
 
     Parameters
@@ -96,7 +96,7 @@ class TreeModel(object):
         """Create a matrix of all possible paths through the tree.
 
         This function creates a (2^(p-1), p) matrix of paths through the
-        underlying tree on TCREZClimate, where p is the number of periods. This
+        underlying tree on CAP6, where p is the number of periods. This
         matrix is vital to properly calculating damages, mitigated emissions
         pathways, among other quantities.
 

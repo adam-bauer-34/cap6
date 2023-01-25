@@ -2,7 +2,7 @@ import numpy as np
 from abc import ABCMeta, abstractmethod
 
 class BaseStorageTree(object, metaclass=ABCMeta):
-    """Abstract storage class for the EZ-Climate model.
+    """Abstract storage class for the CAP6 model.
 
     Parameters
     ----------
@@ -208,8 +208,9 @@ class BaseStorageTree(object, metaclass=ABCMeta):
             delimiter in file
 
         """
-        import sys 
-        sys.path.append("/data/keeling/a/adammb4/ClimateEcon/ez-climate/new-ezclimate/")
+        import sys, os 
+        cwd = os.getcwd()
+        sys.path.append(cwd)
         
         from src.tools import write_columns_csv, file_exists
         if file_exists(file_name):
@@ -252,8 +253,9 @@ class BaseStorageTree(object, metaclass=ABCMeta):
             delimiter in file
 
         """
-        import sys 
-        sys.path.append("/data/keeling/a/adammb4/ClimateEcon/ez-climate/new-ezclimate/")
+        import sys, os
+        cwd = os.getcwd()
+        sys.path.append(cwd)
         from src.tools import write_columns_to_existing
         output_lst = []
         for t in self.decision_times[:-1]:
@@ -261,7 +263,7 @@ class BaseStorageTree(object, metaclass=ABCMeta):
         write_columns_to_existing(lst=output_lst, file_name=file_name, header=header)
 
 class SmallStorageTree(BaseStorageTree):
-    """Storage tree class for the EZ-Climate model. No storage in nodes between 
+    """Storage tree class for the CAP6 model. No storage in nodes between 
     periods in `decision_times`.
 
     Parameters
@@ -354,7 +356,7 @@ class SmallStorageTree(BaseStorageTree):
         raise IndexError("Period not in decision times or first period")
 
 class BigStorageTree(BaseStorageTree):
-    """Storage tree class for the EZ-Climate model. Storage in nodes between 
+    """Storage tree class for the CAP6 model. Storage in nodes between 
     periods in `decision_times`. 
 
     Parameters

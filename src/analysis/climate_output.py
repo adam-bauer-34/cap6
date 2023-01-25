@@ -5,15 +5,15 @@ University of Illinois at Urbana Champaign
 adammb4@illinois.edu
 4/22/2022
 
-This code contains the ClimateAnalysis class, one of the family of analysis classes in TCREZClimate.
+This code contains the ClimateAnalysis class, one of the family of analysis classes in CAP6.
 """
 
 import numpy as np
 
-from ..tools import write_columns_csv, append_to_existing, import_csv
+from ..tools import write_columns_csv, append_to_existing
 
 class ClimateOutput(object):
-    """Calculate and save output from the TCREZClimate model.
+    """Calculate and save output from the CAP6 model.
 
     Parameters
     ----------
@@ -28,8 +28,6 @@ class ClimateOutput(object):
         SCC prices
     ave_mitigations : ndarray
         average mitigations
-    ave_emissions : ndarray
-        average emissions
     expected_period_price : ndarray
         expected SCC for the period
     expected_period_mitigation : ndarray
@@ -42,7 +40,6 @@ class ClimateOutput(object):
         self.utility = utility
         self.prices = None
         self.ave_mitigations = None
-        self.ave_emissions = None
         self.expected_period_price = None
         self.expected_period_mitigation = None
         self.expected_period_emissions = None
@@ -74,11 +71,9 @@ class ClimateOutput(object):
 
         self.prices = np.zeros(len(m))
         self.ave_mitigations = np.zeros(len(m))
-        self.ave_emissions = np.zeros(len(m))
         self.expected_period_price = np.zeros(periods)
         self.expected_period_mitigation = np.zeros(periods)
         self.expected_period_emissions = np.zeros(periods)
-        additional_emissions = self._additional_ghg_emission(m)
         self.ghg_levels = self.utility.damage.ghg_level(m)
 
         for period in range(0, periods):
@@ -97,40 +92,10 @@ class ClimateOutput(object):
                 price = self.utility.cost.price(years, m[node], mean_mitigation)
                 self.prices[node] = price
                 self.ave_mitigations[node] = self.utility.damage.average_mitigation_node(m, node, period)
-                self.ave_emissions[node] = None
-                #self.ave_emissions[node] = additional_emissions[node] / (period_years*emit_baseline.emission_to_bau) # !!
 
             probs = tree.get_probs_in_period(period)
             self.expected_period_price[period] = np.dot(self.prices[nodes[0]:nodes[1]+1], probs)
             self.expected_period_mitigation[period] = np.dot(self.ave_mitigations[nodes[0]:nodes[1]+1], probs)
-            self.expected_period_emissions[period] = np.dot(self.ave_emissions[nodes[0]:nodes[1]+1], probs)
-
-    def _additional_ghg_emission(self, m):
-        """Calculate the emission added by every node.
-
-        Parameters
-        ----------
-        m : ndarray or list
-            array of mitigation
-        utility : `Utility` object
-            object of utility class
-
-        Returns
-        -------
-        ndarray
-            additional emission in nodes
-        """
-
-        additional_emission = np.zeros(len(m))
-        cache = set()
-        for node in range(self.utility.tree.num_final_states, len(m)):
-            path = self.utility.tree.get_path(node)
-            for i in range(len(path)):
-                if path[i] not in cache:
-                    additional_emission[path[i]] = (1.0 - m[path[i]]) \
-                                                * self.utility.damage.emit_baseline.baseline_ppm_periods[i]
-                    cache.add(path[i])
-        return additional_emission
 
     def save_output(self, m, prefix=None):
         """Function to save calculated values in `calculate_output` in the file `prefix` + 'node_period_output' 
@@ -155,9 +120,9 @@ class ClimateOutput(object):
             prefix = ""
 
         #print('in ClimateOutput.save_output(), prefix =',prefix)
-        write_columns_csv([m, self.prices, self.ave_mitigations, self.ave_emissions, self.ghg_levels], 
+        write_columns_csv([m, self.prices, self.ave_mitigations, self.ghg_levels], 
                     prefix+"node_period_output", ["Node", "Mitigation", "Prices", "Average Mitigation",
-                    "Average Emission", "GHG Level"], [list(range(len(m)))])
+                    "GHG Level"], [list(range(len(m)))])
 
         append_to_existing([self.expected_period_price, self.expected_period_mitigation, self.expected_period_emissions],
                            prefix+"node_period_output", header=["Period", "Expected Price", "Expected Mitigation",

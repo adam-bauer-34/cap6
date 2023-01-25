@@ -1,11 +1,11 @@
-"""Climate class for TCREZClimate.
+"""Climate class for CAP6.
 
 Adam M. Bauer
 University of Illinois at Urbana Champaign
 adammb4@illinois.edu
 3.21.2022
 
-This code contains the climate class for TCREZClimate. It utilizes an impulse
+This code contains the climate class for CAP6. It utilizes an impulse
 response function to calculate the concentrations at a given time for a given
 emission pathway. It also samples the distribution of TCRE.
 """
@@ -16,7 +16,7 @@ from abc import ABCMeta, abstractmethod
 from scipy.stats import truncnorm
 
 class Climate(object, metaclass=ABCMeta):
-    """Abstract climate class for the TCREZClimate model.
+    """Abstract climate class for the CAP6 model.
 
     Parameters
     ----------
@@ -50,7 +50,7 @@ class Climate(object, metaclass=ABCMeta):
         pass
 
 class BPWClimate(Climate):
-    """Climate model for TCREZClimate.
+    """Climate model for CAP6.
 
     This contains multiple methods and attributes which describe the climate
     system as of AR6.
@@ -65,10 +65,6 @@ class BPWClimate(Climate):
 
     draws: int
         Number of Monte Carlo samples to take of relevant distributions.
-
-    t_var_mult: float
-        multiple of TCRE standard deviation (used primarily for probing impacts
-        of larger climate uncertainty in the damage simulation) (default is 1.)
 
     Attributes
     ----------
@@ -98,10 +94,6 @@ class BPWClimate(Climate):
         TCRE_STD: float
             standard deviation of the TCRE distribution (in K / 1000 GtCO2)
             (Taken from AR6 WG1 SPM-36.)
-    t_var_mult: float
-        multiple of TCRE standard deviation (used primarily for probing
-        impacts of larger climate uncertainty in the damage simulation)
-        (default is 1.)
 
     Properties
     ----------
@@ -127,11 +119,10 @@ class BPWClimate(Climate):
         makes impulse response function from Joos et al., 2013
     """
 
-    def __init__(self, tree, emit_baseline, draws, t_var_mult=1.0):
+    def __init__(self, tree, emit_baseline, draws):
         self.tree = tree
         self.emit_baseline = emit_baseline
         self.DRAWS = draws
-        self.t_var_mult = t_var_mult
 
         # forcing equation constants
         self.C_0 = 278 # ppm
@@ -150,12 +141,13 @@ class BPWClimate(Climate):
         self.TAU_3 = 4.304 # years
 
         # TCRE best estimates from AR6 WG1 SPM-36
-        self.TCRE_BEST_ESTIMATE = 0.45 # deg C / 1000 GtCO2
-        self.TCRE_STD = 0.18 * self.t_var_mult # deg C / 1000 GtCO2
+        self.TCRE_BEST_ESTIMATE = 0.52 # deg C / 1000 GtCO2
+        self.TCRE_STD = 0.21 # deg C / 1000 GtCO2
 
     @property
     def TCRE_dist(self):
-        """Sample the TCRE distribution. (Assumed to be a truncated Gaussian.)
+        """Sample the TCRE distribution. (Assumed to be a truncated Gaussian,
+        as TCRE cannot be negative.)
         """
 
         a = -1 * self.TCRE_BEST_ESTIMATE * self.TCRE_STD**(-1)
@@ -229,8 +221,8 @@ class BPWClimate(Climate):
             temperature time series
         """
 
-        # note to self: these temperature pathways are in terms of temperature
-        # change *above preindustrial*! 
+        # NOTE: these temperature pathways are in terms of temperature
+        # change *above present day levels*! 
 
         if MC:
             temperature_ts = (self.emit_baseline.baseline_cumemit\

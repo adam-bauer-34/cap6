@@ -1,4 +1,4 @@
-"""CAP6 main file
+"""CAP6 main file.
 
 Adam M. Bauer
 University of Illinois at Urbana Champaign
@@ -6,6 +6,7 @@ adammb4@illinois.edu
 3.14.2022
 
 This is the main file for the Climate Asset Pricing model -- AR6. 
+Generates as many output files as runs desired.
 
 To run: python BPW_main.py
 """
@@ -58,7 +59,7 @@ header, indices, data = import_csv(data_csv_file, delimiter=',', indices=2)
 desired_runs. These numbers correspond to the run numbers in data_csv_file.
 """
 
-desired_runs = [275, 276, 277, 278]
+desired_runs = [0, 1, 2, 3]
 for i in desired_runs:
     name = indices[i][1]
 
@@ -66,27 +67,20 @@ for i in desired_runs:
     """
 
     ra, eis, pref, growth, tech_chg, tech_scale, dam_func,\
-        baseline_num, tip_on, bs_premium, crra_on, d_unc, t_unc,\
-        d_var_mult, t_var_mult, no_free_lunch = data[i]
+        baseline_num, tip_on, bs_premium, d_unc, t_unc,\
+        no_free_lunch = data[i]
 
     baseline_num = int(baseline_num)
     dam_func = int(dam_func)
     tip_on = int(tip_on)
-    crra_on = int(crra_on)
     d_unc = int(d_unc)
     t_unc = int(t_unc)
     no_free_lunch = int(no_free_lunch)
 
-    """On if CRRA preferences are desired. This amounts to setting RA = 1/EIS.
-    """
-
-    if crra_on:
-        ra = eis**(-1)
-
     print('**Running job:       ', name, '\n**Model Parameters are:')
     model_params = [ra, eis, pref, growth, tech_chg, tech_scale,\
-                    dam_func, baseline_num, tip_on, bs_premium, crra_on, d_unc,
-                    t_unc, d_var_mult, t_var_mult, no_free_lunch]
+                    dam_func, baseline_num, tip_on, bs_premium, d_unc,
+                    t_unc, no_free_lunch]
     pprint.pprint(set(zip(header,model_params)))
 
     """Initialize model classes. First is the tree model.
@@ -107,8 +101,7 @@ for i in desired_runs:
     """
 
     draws = 3 * 10**6
-    climate = BPWClimate(t, baseline_emission_model, draws=draws,
-                         t_var_mult=t_var_mult)
+    climate = BPWClimate(t, baseline_emission_model, draws=draws)
 
     """Cost class to calculate the cost of carbon once damages are known.
     """
@@ -139,9 +132,7 @@ for i in desired_runs:
 
     damsim_filename = ''.join(["BPW_simulated_damages_df", str(dam_func),
                                "_TP", str(tip_on), "_SSP", str(baseline_num),
-                               "_dunc", str(d_unc), "_tunc", str(t_unc),
-                               "_dmult", str(d_var_mult), "_tmult",
-                               str(t_var_mult)])
+                               "_dunc", str(d_unc), "_tunc", str(t_unc)])
 
     if import_damages:
         df.import_damages(file_name=damsim_filename)
@@ -149,7 +140,7 @@ for i in desired_runs:
     else:
         df.damage_simulation(filename=damsim_filename, save_simulation=True,
                              dam_func=dam_func, tip_on=tip_on, d_unc=d_unc,
-                             t_unc=t_unc, d_var_mult=d_var_mult)
+                             t_unc=t_unc)
 
     """The economic utility class.
     """

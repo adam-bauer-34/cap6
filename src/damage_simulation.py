@@ -1,15 +1,12 @@
-"""Damage simulation class
+"""Damage simulation class.
 
 Adam M. Bauer
 University of Illinois at Urbana Champaign
 adammb4@illinois.edu
 3.14.2022
 
-Damage simulation class for TCRE-ZClimate. Simulates damage pathways for use in
+Damage simulation class for CAP6. Simulates damage pathways for use in
 damage.py and in the utility optimization.
-
-This is considered an "upgraded" and "updated" version of the EZClimate code,
-written by Daniel, Litterman, and Wagner.
 """
 
 import types
@@ -23,13 +20,13 @@ import multiprocessing as mp
 
 from src.tools import _pickle_method, _unpickle_method
 from src.tools import write_columns_csv, append_to_existing, get_integral_var_ub
-from src.damage_calibration_params import dam_cal_params
+from cal.damage_cal import dam_cal_params
 from random import randrange
 
 copyreg.pickle(types.MethodType, _pickle_method, _unpickle_method)
 
 class DamageSimulation(object):
-    """Simulation of damages for the TCREZClimate model.
+    """Simulation of damages for the Climate Asset Pricing model -- AR6.
 
     The damage function simulation is a key input into the pricing engine.
     Damages are represented in arrays of dimension n x p, where n = num states
@@ -68,10 +65,6 @@ class DamageSimulation(object):
         toggles parametric uncertainty in temperature emulation
     tip_on: bool
         T/F: tipping point damages included?
-    d_var_mult: float
-        multple of damage function variance (used to probe how
-        increases/decreases in parametric damage uncertainty impacts price
-        paths)
 
     Attributes
     ----------
@@ -101,15 +94,10 @@ class DamageSimulation(object):
         T/F: tipping points damages included?
     d : ndarray
         simulated damages
-    d_var_mult: float
-        multple of damage function variance (used to probe how
-        increases/decreases in parametric damage uncertainty impacts price
-        paths)
     """
 
     def __init__(self, tree, emission_baseline, climate, draws,
-                 mitigation_constants, dam_func, tip_on, d_unc, t_unc,
-                 d_var_mult):
+                 mitigation_constants, dam_func, tip_on, d_unc, t_unc):
         self.tree = tree
         self.emission_baseline = emission_baseline
         self.climate = climate
@@ -119,7 +107,6 @@ class DamageSimulation(object):
         self.tip_on = tip_on
         self.d_unc = d_unc
         self.t_unc = t_unc
-        self.d_var_mult = d_var_mult
         self.d = None
 
     def simulate(self, write_to_file=False,

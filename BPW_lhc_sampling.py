@@ -8,8 +8,7 @@ adammb4@illinois.edu
 The idea here is to choose an emissions baseline, and then using a
 Latin Hypercube sample the remaining parameters (RA, EIS, PRTP, tech_chg,
 tech_scale). We always assume:
-    crra_on = 0
-    tip_oin = 1
+    tip_on = 1
     d_unc = 1
     t_unc = 1
     bs_premium = 10000
@@ -26,7 +25,7 @@ The rest have user defined ranges; default in this file are:
     tech_chg = {0, 3}
     tech_scale = {0, 3}
 
-! See lines 99 and 100 to change these ranges.
+! See lines 88 and 89 to change these ranges.
 
 To run: python BPW_lhc_sampling.py [baseline_num]
 """
@@ -34,6 +33,7 @@ To run: python BPW_lhc_sampling.py [baseline_num]
 import sys
 import pathlib
 import pprint
+import os
 
 import numpy as np
 
@@ -116,12 +116,9 @@ for (ra, eis, tech_chg, tech_scale, pref) in zip(ras, eiss, exs, ends, prtps):
     """
     dam_func = 0
     tip_on = 1
-    crra_on = 0
     d_unc = 1
     t_unc = 1
     growth = 0.015
-    d_var_mult = 1.0
-    t_var_mult = 1.0
     no_free_lunch = False
 
     print("Run number: ", i)
@@ -178,9 +175,7 @@ for (ra, eis, tech_chg, tech_scale, pref) in zip(ras, eiss, exs, ends, prtps):
 
     damsim_filename = ''.join(["BPW_simulated_damages_df", str(dam_func),
                                "_TP", str(tip_on), "_SSP", str(baseline_num),
-                               "_dunc", str(d_unc), "_tunc", str(t_unc),
-                               "_dmult", str(d_var_mult), "_tmult",
-                               str(t_var_mult)])
+                               "_dunc", str(d_unc), "_tunc", str(t_unc)])
 
     if import_damages:
         df.import_damages(file_name=damsim_filename)
@@ -284,27 +279,23 @@ for (ra, eis, tech_chg, tech_scale, pref) in zip(ras, eiss, exs, ends, prtps):
     i += 1
 
 # save output! 
-np.savetxt(''.join(["/data/keeling/a/adammb4/ClimateEcon/ez-climate/TCREZClimate/data/",
-                    "lhc_sampling_paths_ssp", str(baseline_num), "_N",
+cwd = os.getcwd() # find current working directory
+np.savetxt(''.join([cwd, "/data/lhc_sampling_paths_ssp", str(baseline_num), "_N",
                     str(N_RUNS), ".csv"]),
            exp_prices_and_uopts, delimiter=',')
 
-np.savetxt(''.join(["/data/keeling/a/adammb4/ClimateEcon/ez-climate/TCREZClimate/data/",
-                    "lhc_sampling_exp_m_ssp", str(baseline_num), "_N",
+np.savetxt(''.join([cwd, "/data/lhc_sampling_exp_m_ssp", str(baseline_num), "_N",
                     str(N_RUNS), ".csv"]),
            exp_mits, delimiter=',')
 
-np.savetxt(''.join(["/data/keeling/a/adammb4/ClimateEcon/ez-climate/TCREZClimate/data/",
-                    "lhc_sampling_exp_T_ssp", str(baseline_num), "_N",
+np.savetxt(''.join([cwd, "/data/lhc_sampling_exp_T_ssp", str(baseline_num), "_N",
                     str(N_RUNS), ".csv"]),
            exp_Ts, delimiter=',')
 
-np.savetxt(''.join(["/data/keeling/a/adammb4/ClimateEcon/ez-climate/TCREZClimate/data/",
-                    "lhc_sampling_exp_conc_ssp", str(baseline_num), "_N",
+np.savetxt(''.join([cwd, "/data/lhc_sampling_exp_conc_ssp", str(baseline_num), "_N",
                     str(N_RUNS), ".csv"]),
            exp_concs, delimiter=',')
 
-np.savetxt(''.join(["/data/keeling/a/adammb4/ClimateEcon/ez-climate/TCREZClimate/data/",
-                    "lhc_sampling_exp_dam_ssp", str(baseline_num), "_N",
+np.savetxt(''.join([cwd, "/data/lhc_sampling_exp_dam_ssp", str(baseline_num), "_N",
                     str(N_RUNS), ".csv"]),
            exp_dams, delimiter=',')

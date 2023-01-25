@@ -14,8 +14,7 @@ import sys
 sys.path.append("/data/keeling/a/adammb4/ClimateEcon/ez-climate/TCREZClimate/")
 
 from src.optimization import GeneticAlgorithm, GradientSearch
-from src.analysis.climate_output import *
-from src.analysis.risk_decomp import *
+#from src.analysis.climate_output import *
 from src.emit_baseline import *
 from src.cost import *
 from src.damage import *

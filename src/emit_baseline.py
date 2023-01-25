@@ -6,7 +6,7 @@ University of Illinois at Urbana Champaign
 3.24.2022
 
 Contains the abstract class BusinessAsUsual as well as its subclass,
-BPWBusinessAsUsual, which is implemented in TCREZClimate.
+BPWBusinessAsUsual, which is implemented in CAP6.
 """
 
 import numpy as np
@@ -15,7 +15,7 @@ from abc import ABC, abstractmethod
 from .tools import get_integral_var_ub, import_csv
 
 class EmissionBaseline(ABC):
-    """Abstract emissions baseline class for TCREZClimate.
+    """Abstract emissions baseline class for CAP6.
 
     Attributes
     ----------
@@ -86,7 +86,7 @@ class BPWEmissionBaseline(EmissionBaseline):
     """Baseline CO2 emission pathways.
 
     This class contains information on the various emissions pathways
-    used by TCREZClimate. It features baseline flexibility, allowing the code
+    used by CAP6. It features baseline flexibility, allowing the code
     to change which SSP baseline we use with a parameter.
 
     Parameters
@@ -174,7 +174,7 @@ class BPWEmissionBaseline(EmissionBaseline):
     def baseline_emission_setup(self):
         """Make baselines & evaluate them at decision node times.
 
-        TCREZClimate relies on a designated emissions pathway, from which
+        CAP6 relies on a designated emissions pathway, from which
         we mitigate to limit global warming. In this function, we import every
         SSP baseline from "SSP_baselines.csv".
         (The values in this file were taken from
@@ -186,7 +186,7 @@ class BPWEmissionBaseline(EmissionBaseline):
         Figure 2.)
 
         We then evaluate each of these baselines at the decision period times.
-        These will be used throughout TCREZClimate.
+        These will be used throughout CAP6.
 
         *Raises ValueError if baseline_num is outside acceptable range.
         """
@@ -235,7 +235,7 @@ class BPWEmissionBaseline(EmissionBaseline):
     def _make_extension(self, time, baseline_gtco2_2100, extension_year):
         """Make baseline extensions from 2100 -> extension_year.
 
-        TCREZClimate requires emissions values through the last decision time.
+        CAP6 requires emissions values through the last decision time.
         The SSP database only provides values through 2100, but in Meinshausen
         et al., 2020 extensions are provided. We make their approximate
         versions here by linearly interpolating the final emission value to
@@ -277,7 +277,7 @@ class BPWEmissionBaseline(EmissionBaseline):
                                is_last=False):
         """Calculate the mitigated version of a given baseline.
 
-        In TCREZClimate, we often need to apply a mitigation to the baseline
+        In CAP6, we often need to apply a mitigation to the baseline
         emission pathway. This function creates this "mitigated" baseline by
         multiplying every emissions value between two decision nodes by a
         mitigation value supplied by m. If m is a constant, then we make an

@@ -1,4 +1,4 @@
-"""Generate samples from a Latin Hypercube for TCREZClimate model runs.
+"""Generate samples from a Latin Hypercube for CAP6 'ensamble' model runs.
 
 Adam Michael Bauer
 University of Illinois at Urbana Champaign

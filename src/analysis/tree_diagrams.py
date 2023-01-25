@@ -6,7 +6,7 @@ adammb4@illinois.edu
 5/18/2022
 
 This code contains the TreeDiagram class, which conviniently creates tree
-diagrams of the output of TCREZClimate.
+diagrams of the output of CAP6.
 """
 
 import numpy as np
@@ -21,7 +21,7 @@ mpl.rcParams['font.family'] = 'STIXGeneral'
 class TreeDiagram:
     """Tree diagram class.
 
-    Makes plot of TCREZClimate model output in path dependent binomial tree
+    Makes plot of CAP6 model output in path dependent binomial tree
     form.
 
     Parameters

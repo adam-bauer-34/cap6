@@ -1,4 +1,4 @@
-"""Optimization codes for TCREZClimate.
+"""Optimization codes for CAP6.
 
 Adam Michael Bauer
 University of Illinois at Urbana Champaign
@@ -6,7 +6,7 @@ adammb4@illinois.edu
 4/27/2022
 
 This code contains three optimization classes: GeneticAlgorithm,
-GradientSearch, and CoordinateDescent. The current version of TCREZClimate uses
+GradientSearch, and CoordinateDescent. The current version of CAP6 uses
 the first two in tandem.
 """
 
@@ -24,7 +24,7 @@ from src.tools import _pickle_method, _unpickle_method
 copyreg.pickle(types.MethodType, _pickle_method, _unpickle_method)
 
 class GeneticAlgorithm(object):
-    """Optimization algorithm for the EZ-Climate model.
+    """Optimization algorithm for the CAP6 model.
 
     The genetic algorithm is a stochastic optimization algorithm which
     searches for optima using ideas inspired from Darwin's evoluationary
@@ -466,7 +466,7 @@ class GeneticAlgorithm(object):
         return np.copy(survive_pop), np.copy(survive_fitness)
 
 class GradientSearch(object):
-    """Gradient search optimization algorithm for the EZ-Climate model.
+    """Gradient search optimization algorithm for the CAP6 model.
 
     Parameters
     ----------
@@ -682,7 +682,7 @@ class GradientSearch(object):
             select and run gradient descent on the `topk` first points of
             `initial_point_list`
 
-            Adam: The first four points in EZClimate are the four "most fit"
+            Adam: The first four points in CAP6 are the four "most fit"
             members from the Genetic Algorithm
 
         Returns
