@@ -12,97 +12,44 @@ To contact: adammb4 [at] illinois [dot] edu
 3. [Model](#model)
 4. [Directory overview](#directover)
    1. [main](#main)
-   2. [analysis notebook](#analnote)
+   2. [aux_notebooks](#auxnote)
    3. [src](#src)
-      1. [`climate.py`](#climate)
-      2. [`cost.py`](#cost)
-      3. [`damage_simulation.py`](#damsim)
-      4. [`damage.py`](#dam)
-      5. [`emit_baseline.py`](#emitbase)
-      6. [`optimization.py`](#opt)
-      7. [`storage_tree.py`](#storetree)
-      8. [`tools.py`](#tool)
-      9.  [`tree.py`](#tree)
-      10. [`utility.py`](#util)
-      11. [analysis](#anal)
-          1. [`climate_output.py`](#outclimate)
-          2. [`risk_decomp.py`](#riskdecomp)
-          3. [`tree_diagram.py`](#treediagram)
-          4. [`output_unpacker.py`](#outputunpack)
    4. [data](#data)
+   5. [notebooks] (#notes)
 1. [Copyright statement](#dontgetgot)
 
 ## Code description <a name=“codedesc”></a>
-This code is an updgraded, modified, and refactored version of [EZClimate](https://github.com/Litterman/EZClimate).  It features an updated climate model based off of the *transient climate respone to emissions* (TCRE), updated damage functions and cost curves based on estimates made from the IPCC’s sixth assessment report, a refactored and more accurate damage interpolation scheme, new flexible emissions baselines based off of the shared socioeconomic pathways (SSPs), and new Jupyter notebooks making model output easily analyzable by the user. The code is also thoroughly commented, thus making it accessible for users wishing to modify it and use it in their own studies.
+This is the source code for the Climate Asset Pricing model -- AR6 (CAP6). CAP6 features an updated climate model based off of the *transient climate respone to emissions* (TCRE), updated damage functions and cost curves based on estimates made from the IPCC’s sixth assessment report, a refactored and more accurate damage interpolation scheme, new flexible emissions baselines based off of the shared socioeconomic pathways (SSPs), and new Jupyter notebooks making model output easily analyzable by the user. The code is also thoroughly commented, thus making it accessible for users wishing to modify it and use it in their own studies.
 
 ## Publication <a name=“pubs”></a>
-We are preparing a publication which uses this code to analyze the controlling factors on CO<sub>2</sub> price paths. We will post a link and abstract when the publication is prepared and submitted.
+We are preparing a publication which uses this code and will post a link and abstract when the publication is prepared and submitted.
 
 ## Model <a name=“model”></a>
-TCREZClimate is a dynamical asset pricing model designed to calculate the optimal price path of CO<sub>2</sub> emissions. The code recursively solves for the economic utility, assuming Epstein-Zin preferences, within a path dependent binomial tree framework. See our paper for a full description of the model.
+CAP6 is a dynamical asset pricing model designed to calculate the optimal price path of CO<sub>2</sub> emissions. The code recursively solves for the economic utility, assuming Epstein-Zin preferences, within a path dependent binomial tree framework. See our paper for a full description of the model.
 
 ## Directory overview <a name=“directover”></a>
 
-### `BPW_main.py` <a name=“main”></a>
-The main file for the model. 
-To run: python BPW_main.py.
+### Main files <a name=“main”></a>
+There are two "main" files. The first is `BPW_main.py`, which runs a single model run (or as many as you want). Which run you want to do is pulled from the `done_runs` list in `BPW_main.py` (which, in turn, comes from `BPW_research_runs.csv` in the `data` directory).
 
-### Analysis_notebook <a name=“analnote”></a>
-The analysis notebook for the model. See the notebook for directions on use. 
+The second "main" file is `BPW_lhc_sampling.py`. This creates the "ensemble" model runs. **Warning**: this takes an insanely long time to run (order weeks) on a personal computer. We had a computing cluster at our disposal, which made this code managable (it still took 6 days).
 
-### src <a name=“src”></a>
+### `aux_notebooks` <a name=“analnote”></a>
+This directory contains the various notebooks we used to calibrate different model components.
 
-#### `climate.py` <a name=“climate”></a>
-Contains the `BPWClimate` class, which contains all the relevant methods and parameters associated with our climate emulator. Two main quantities are calculated in this class: the temperature as a function of time, and the CO<sub>2</sub> concentrations in the atmosphere given an emissions pathay.
+### `src` <a name=“src”></a>
+Contains the source code for the model. The "nuts and bolts", if you will.
 
-#### `cost.py` <a name=“cost”></a>
-Contains `BPWCost` class, which calculates the total cost ot society of CO<sub>2</sub> emissions, as well as the price of mitigation.
+### `data`
+This directory will contain the output of the model when it is run. It also contains `BPW_research_runs.csv`, which tells the "main" files what the model parameters are for a given run. Additionally, it contains calibration data, such as the data points for different damage functions, emissions baselines, and so on.
 
-#### `damage_simulation.py` <a name=“damsim”></a>
-Contains the `DamageSimulation` class, which using Monte Carlo creates a set of potential damage pathways. This, in essense, defies the landscape of fragility in the model, which impacts representitive agent decisions to abate or not abate CO<sub>2</sub> emissions.
-
-#### `damage.py` <a name=“dam”></a>
-Contains the `BPWDamage` class, which calculates climate damages at each node in the tree.
-
-#### `emit_baseline.py` <a name=“emitbase”></a>
-Contains the `BPWEmissionBaseline` class, which dictates the emissions baseline for the model run; choices include each of the SSPs, 1—5. They are extended to 2400 using an interpolation procedure, see the code for details
-
-#### `optimization.py` <a name=“opt”></a>
-Contains two classes: `GeneticAlgorithm` and `GradientDescent`, which are used to find the optimal utility. The genetic algorithm is a stochastic optimizaiton routine which can find optima of an objective function without requiring its derivative. The output of the genetic algorithm is used as the *initial guess* of the gradient descent algorithm, which further refines the optimal economic utility.
-
-#### `storage_tree.py` <a name=“storetree”></a>
-Contains three classes: `BigStorageTree`, `SmallStorageTree` and `BaseStorageTree`; `BigStorageTree` and `SmallStorageTree` are subclasses of `BaseStorageTree`. These classes are used to store values of various model quantites during optimization, such as the economic utility, consumption, and price.
-
-#### `tools.py` <a name=“tool”></a>
-A set of miscellaneous functions used throughout the model, such as various I/O functions and integration calculators.
-
-#### `tree.py` <a name=“tree”></a>
-Contains the `TreeModel` class, which defines the binomial tree underlying the optimization calculation.
-
-#### `utility.py` <a name=“util”></a>
-Contains `EZUtility` class, which calculates the utility throughout our model.
-
-#### analysis <a name=“anal”></a>
-
-##### `climate_output.py` <a name=“outclimate”></a>
-Contains `ClimateOutput` object, which is used to calculate various model quantites after optimization has been run to be saved for analysis.
-
-##### `risk_decomp.py` <a name=“riskdecomp”></a>
-Contains `RiskDecomposition` object, which carries out a risk decomposition routine to parse the influence of various economic parameters on the cost of carbon.
-
-##### `tree_diagrams.py` <a name=“treediagram”></a>
-Contains `TreeDiagram` object, which can be used in the analysis notebook to create tree diagrams to visualize the evolution of various model outputs within the binomial tree structure.
-
-##### `output_unpacker.py` <a name=“outputunpack”></a>
-Contains `OutputUnpacker` object, which is used by the master analysis notebook to “unpack” the model output and make a set of interesting quantities for analysis.
-
-### data
-This directory will contain the output of the model. It currently contains two files: `SSP_baselines.csv` and `BPW_research_runs.csv`. The first dictates the emissions in each SSP for the years 2020 — 2100. The second contains the sets of model paramters for our model runs in our paper. 
+### Notebooks <a name="notes"></a>
+Each notebook in the top directory is an analysis notebook. These were used to create the figures in our publication. They come with varying levels of sloppiness. 
 
 ## Copyright statement <a name=“dontgetgot”></a>
 MIT License
 
-Copyright (c) 2022 Adam Michael Bauer
+Copyright (c) 2023 Adam Michael Bauer
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
