@@ -20,7 +20,7 @@ import multiprocessing as mp
 
 from src.tools import _pickle_method, _unpickle_method
 from src.tools import write_columns_csv, append_to_existing
-from cal.damage_cal import dam_cal_params
+from .cal.damage_cal import dam_cal_params
 from random import randrange
 
 copyreg.pickle(types.MethodType, _pickle_method, _unpickle_method)

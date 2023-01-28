@@ -1,2 +1,6 @@
 
 .DS_Store
+data/pref-run_log.pickle
+data/pref-run_node_period_output.csv
+data/pref-run_trees.csv
+data/simulated_damages_df0_TP1_SSP2_dunc1_tunc1.csv

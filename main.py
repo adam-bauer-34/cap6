@@ -34,7 +34,7 @@ tested.
 
 optimize = True
 test_run = False
-import_damages = False
+import_damages = True
 
 """If test_run, set optimization parameters to small values to run more
 efficiently. Else, it's a full run, so crank those numbers up!
@@ -46,7 +46,7 @@ if test_run:
     N_generations_ga = 2
     N_iters_gs = 2
 else:
-    N_generations_ga = 200
+    N_generations_ga = 150
     N_iters_gs = 100
 
 """Import header, indices, and data from reference .csv file.
@@ -116,7 +116,7 @@ for i in desired_runs:
     values of mitigation for the damage simulation.
     """
 
-    d_m = 0.01
+    d_m = 0.1
     mitigation_constants = np.arange(0, 1 + d_m, d_m)[::-1]
     df = BPWDamage(tree=t, emit_baseline=baseline_emission_model,
                    climate=climate, mitigation_constants=mitigation_constants,

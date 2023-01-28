@@ -30,7 +30,7 @@ def make_class_instances(run_list):
     ----------
     run_list: list
         list of run numbers, where run number refers to the number of the run
-        in BPW_research_runs.csv
+        in research_runs.csv
 
     Returns
     -------
@@ -45,7 +45,7 @@ def make_class_instances(run_list):
     """
 
     # import header, indicies, and data from reference .csv file
-    data_csv_file = 'BPW_research_runs'
+    data_csv_file = 'research_runs'
     header, indices, data = import_csv(data_csv_file, delimiter=',', indices=2)
 
     # instance classes
@@ -86,7 +86,7 @@ def make_class_instances(run_list):
                           draws=draws)
 
         # dam sim file
-        damsim_filename = ''.join(["BPW_simulated_damages_df", str(dam_func),
+        damsim_filename = ''.join(["simulated_damages_df", str(dam_func),
                                    "_TP", str(tip_on), "_SSP",
                                    str(baseline_num), "_dunc", str(d_unc),
                                    "_tunc", str(t_unc)])

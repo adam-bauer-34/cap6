@@ -13,7 +13,7 @@ as a template for other cost classes. The second is our cost class -- BPWCost
 import numpy as np
 from abc import ABCMeta, abstractmethod
 
-from cal.cost_cal import cost_cal_params
+from .cal.cost_cal import cost_cal_params
 
 class Cost(object, metaclass=ABCMeta):
     """Abstract Cost class for the EZ-Climate model.
