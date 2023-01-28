@@ -1,4 +1,4 @@
-hard_dependencies = ("numpy", )
+hard_dependencies = ("numpy", "numba",)
 missing_dependencies = []
 
 for dependency in hard_dependencies:
