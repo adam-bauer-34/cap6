@@ -34,7 +34,7 @@ tested.
 
 optimize = True
 test_run = False
-import_damages = True
+import_damages = False
 
 """If test_run, set optimization parameters to small values to run more
 efficiently. Else, it's a full run, so crank those numbers up!
