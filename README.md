@@ -15,7 +15,7 @@ To contact: adammb4 [at] illinois [dot] edu
    2. [aux_notebooks](#auxnote)
    3. [src](#src)
    4. [data](#data)
-   5. [notebooks] (#notes)
+   5. [notebooks](#notes)
 1. [Copyright statement](#dontgetgot)
 
 ## Code description <a name=“codedesc”></a>
