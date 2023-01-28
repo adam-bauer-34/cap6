@@ -56,8 +56,8 @@ tested.
 
 optimize = True
 test_run = False
-gen_samples = False
-import_damages = True
+gen_samples = True
+import_damages = False
 
 """If test_run, set optimization parameters to small values to run more
 efficiently. Else, it's a full run, so crank those numbers up!
