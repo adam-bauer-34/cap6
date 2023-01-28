@@ -147,7 +147,7 @@ for (ra, eis, tech_chg, tech_scale, pref) in zip(ras, eiss, exs, ends, prtps):
     """Cost class to calculate the cost of carbon once damages are known.
     """
 
-    c = BPWCost(t, emit_at_0=baseline_emission_model.baseline_gtco2[0],
+    c = BPWCost(t, emit_at_0=baseline_emission_model.baseline_gtco2[1],
                 baseline_num=baseline_num, tech_const=tech_chg,
                 tech_scale=tech_scale, cons_at_0=61880.0,
                 backstop_premium=10000., no_free_lunch=no_free_lunch)
