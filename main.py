@@ -183,7 +183,7 @@ for i in desired_runs:
         the optimal economic utility.
         """
         m_opt, u_opt = gs_model.run(initial_point_list=sort_pop, topk=1)
-        print("SCC and Utility after gs:   ", c.price(0, m_opt[0], 0), u_opt)
+        print("Carbon price and Utility after gs:   ", c.price(0, m_opt[0], 0), u_opt)
 
         """Save the output of the gradient search. First make a dictionary
         which stores the damage recombined tree values, the optimal mitigation
