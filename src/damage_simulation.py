@@ -19,7 +19,7 @@ import numpy as np
 import multiprocessing as mp
 
 from src.tools import _pickle_method, _unpickle_method
-from src.tools import write_columns_csv, append_to_existing, get_integral_var_ub
+from src.tools import write_columns_csv, append_to_existing
 from cal.damage_cal import dam_cal_params
 from random import randrange
 
@@ -110,7 +110,7 @@ class DamageSimulation(object):
         self.d = None
 
     def simulate(self, write_to_file=False,
-                 filename="BPW_simulated_damages.csv"):
+                 filename="simulated_damages.csv"):
         """Create damage function values in 'p-period' version of the Summers -
         Zeckhauser model.
 

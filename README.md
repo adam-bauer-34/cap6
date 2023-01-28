@@ -19,7 +19,7 @@ To contact: adammb4 [at] illinois [dot] edu
 1. [Copyright statement](#dontgetgot)
 
 ## Code description <a name=“codedesc”></a>
-This is the source code for the Climate Asset Pricing model -- AR6 (CAP6). CAP6 features an updated climate model based off of the *transient climate respone to emissions* (TCRE), updated damage functions and cost curves based on estimates made from the IPCC’s sixth assessment report, a refactored and more accurate damage interpolation scheme, new flexible emissions baselines based off of the shared socioeconomic pathways (SSPs), and new Jupyter notebooks making model output easily analyzable by the user. The code is also thoroughly commented, thus making it accessible for users wishing to modify it and use it in their own studies.
+This is the source code for the Climate Asset Pricing model -- AR6 (CAP6). CAP6 features an updated climate model based off of an effective transient climate respone to emissions (TCRE), updated damage functions and cost curves based on estimates made from the IPCC’s sixth assessment report, new flexible emissions baselines based off of the shared socioeconomic pathways (SSPs), and new Jupyter notebooks making model output easily analyzable by the user. The code is also thoroughly commented (we hope), thus making it accessible for users wishing to modify it and use it in their own studies.
 
 ## Publication <a name=“pubs”></a>
 We are preparing a publication which uses this code and will post a link and abstract when the publication is prepared and submitted.
@@ -30,9 +30,9 @@ CAP6 is a dynamical asset pricing model designed to calculate the optimal price 
 ## Directory overview <a name=“directover”></a>
 
 ### Main files <a name=“main”></a>
-There are two "main" files. The first is `BPW_main.py`, which runs a single model run (or as many as you want). Which run you want to do is pulled from the `done_runs` list in `BPW_main.py` (which, in turn, comes from `BPW_research_runs.csv` in the `data` directory).
+There are two "main" files. The first is `main.py`, which runs a single model run (or as many as you want). Which run you want to do is pulled from the `desired_runs` list in `main.py` (which, in turn, comes from `research_runs.csv` in the `data` directory).
 
-The second "main" file is `BPW_lhc_sampling.py`. This creates the "ensemble" model runs. **Warning**: this takes an insanely long time to run (order weeks) on a personal computer. We had a computing cluster at our disposal, which made this code managable (it still took 6 days).
+The second "main" file is `main_ensemble.py`. This creates the "ensemble" model runs. **Warning**: this takes an insanely long time to run (order weeks) on a personal computer. We had a computing cluster at our disposal, which made this code managable (it still took 6-7 days).
 
 ### `aux_notebooks` <a name=“analnote”></a>
 This directory contains the various notebooks we used to calibrate different model components.
@@ -41,7 +41,7 @@ This directory contains the various notebooks we used to calibrate different mod
 Contains the source code for the model. The "nuts and bolts", if you will.
 
 ### `data`
-This directory will contain the output of the model when it is run. It also contains `BPW_research_runs.csv`, which tells the "main" files what the model parameters are for a given run. Additionally, it contains calibration data, such as the data points for different damage functions, emissions baselines, and so on.
+This directory will contain the output of the model when it is run. It also contains `research_runs.csv`, which tells the "main" files what the model parameters are for a given run. Additionally, it contains calibration data, such as the data points for different damage functions, emissions baselines, and so on.
 
 ### Notebooks <a name="notes"></a>
 Each notebook in the top directory is an analysis notebook. These were used to create the figures in our publication. They come with varying levels of sloppiness. 

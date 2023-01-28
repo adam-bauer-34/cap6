@@ -34,7 +34,7 @@ tested.
 
 optimize = True
 test_run = False
-import_damages = True
+import_damages = False
 
 """If test_run, set optimization parameters to small values to run more
 efficiently. Else, it's a full run, so crank those numbers up!
@@ -52,14 +52,14 @@ else:
 """Import header, indices, and data from reference .csv file.
 """
 
-data_csv_file = 'BPW_research_runs'
+data_csv_file = 'research_runs'
 header, indices, data = import_csv(data_csv_file, delimiter=',', indices=2)
 
 """Define runs of interest. To change which runs the code does, change
 desired_runs. These numbers correspond to the run numbers in data_csv_file.
 """
 
-desired_runs = [0, 1, 2, 3]
+desired_runs = [0]
 for i in desired_runs:
     name = indices[i][1]
 
@@ -106,7 +106,7 @@ for i in desired_runs:
     """Cost class to calculate the cost of carbon once damages are known.
     """
 
-    c = BPWCost(t, emit_at_0=baseline_emission_model.baseline_gtco2[0],
+    c = BPWCost(t, emit_at_0=baseline_emission_model.baseline_gtco2[1],
                 baseline_num=baseline_num, tech_const=tech_chg,
                 tech_scale=tech_scale, cons_at_0=61880.0,
                 backstop_premium=bs_premium, no_free_lunch=no_free_lunch)
@@ -130,7 +130,7 @@ for i in desired_runs:
     The default is currently "BPW_simulated_damages_TCRE.csv".
     """
 
-    damsim_filename = ''.join(["BPW_simulated_damages_df", str(dam_func),
+    damsim_filename = ''.join(["simulated_damages_df", str(dam_func),
                                "_TP", str(tip_on), "_SSP", str(baseline_num),
                                "_dunc", str(d_unc), "_tunc", str(t_unc)])
 

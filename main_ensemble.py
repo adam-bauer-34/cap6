@@ -78,7 +78,7 @@ DIMS = 5
 
 # get path to current file and set sample file name
 path = str(pathlib.Path(__file__).parent.resolve())
-samp_fname = ''.join([path, '/data/BPW_LHC_samples_N', str(N_RUNS), '_DIMS',
+samp_fname = ''.join([path, '/data/LHC_samples_N', str(N_RUNS), '_DIMS',
                       str(DIMS), '.csv'])
 
 # generate samples (if necessary)
@@ -173,7 +173,7 @@ for (ra, eis, tech_chg, tech_scale, pref) in zip(ras, eiss, exs, ends, prtps):
     specify damsim_filename, the default will be used. 
     """
 
-    damsim_filename = ''.join(["BPW_simulated_damages_df", str(dam_func),
+    damsim_filename = ''.join(["simulated_damages_df", str(dam_func),
                                "_TP", str(tip_on), "_SSP", str(baseline_num),
                                "_dunc", str(d_unc), "_tunc", str(t_unc)])
 
