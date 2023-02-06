@@ -1,4 +1,4 @@
-# The Climate Asset Pricing model -- AR6 (CAP6)
+# The Carbon Asset Pricing model -- AR6 (CAP6)
 
 Written by: Adam Michael Bauer
 
@@ -19,7 +19,7 @@ To contact: adammb4 [at] illinois [dot] edu
 1. [Copyright statement](#dontgetgot)
 
 ## Code description <a name=“codedesc”></a>
-This is the source code for the Climate Asset Pricing model -- AR6 (CAP6). CAP6 features an updated climate model based off of an effective transient climate respone to emissions (TCRE), updated damage functions and cost curves based on estimates made from the IPCC’s sixth assessment report, new flexible emissions baselines based off of the shared socioeconomic pathways (SSPs), and new Jupyter notebooks making model output easily analyzable by the user. The code is also thoroughly commented (we hope), thus making it accessible for users wishing to modify it and use it in their own studies.
+This is the source code for the Carbon Asset Pricing model -- AR6 (CAP6). CAP6 features an updated climate model based off of an effective transient climate respone to emissions (TCRE), updated damage functions and cost curves based on estimates made from the IPCC’s sixth assessment report, new flexible emissions baselines based off of the shared socioeconomic pathways (SSPs), and new Jupyter notebooks making model output easily analyzable by the user. The code is also thoroughly commented (we hope), thus making it accessible for users wishing to modify it and use it in their own studies.
 
 ## Publication <a name=“pubs”></a>
 We are preparing a publication which uses this code and will post a link and abstract when the publication is prepared and submitted.
