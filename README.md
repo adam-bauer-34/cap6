@@ -22,7 +22,7 @@ To contact: adammb4 [at] illinois [dot] edu
 This is the source code for the Carbon Asset Pricing model -- AR6 (CAP6). CAP6 features an updated climate model based off of an effective transient climate respone to emissions (TCRE), updated damage functions and cost curves based on estimates made from the IPCC’s sixth assessment report, new flexible emissions baselines based off of the shared socioeconomic pathways (SSPs), and new Jupyter notebooks making model output easily analyzable by the user. The code is also thoroughly commented (we hope), thus making it accessible for users wishing to modify it and use it in their own studies.
 
 ## Publication <a name=“pubs”></a>
-We are preparing a publication which uses this code and will post a link and abstract when the publication is prepared and submitted.
+Working paper his [here](https://www.cesifo.org/en/publications/2023/working-paper/carbon-dioxide-risky-asset).
 
 ## Model <a name=“model”></a>
 CAP6 is a dynamical asset pricing model designed to calculate the optimal price path of CO<sub>2</sub> emissions. The code recursively solves for the economic utility, assuming Epstein-Zin preferences, within a path dependent binomial tree framework. See our paper for a full description of the model.
