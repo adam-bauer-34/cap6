@@ -401,9 +401,7 @@ class BPWDamage(Damage):
 
         # note current cumulative emissions at the current period for every
         # mitigation constant value
-        mit_cumemit_per = np.array([((1 - self.mitigation_constants[i]) *
-                           self.emit_baseline.baseline_cumemit_periods)[period]
-                           for i in range(self.dnum)])
+        mit_cumemit_per = self._mitigation_cumulative_emissions_knots(period)
 
         # find end states to get probabilities for weighted sum
         end_states = self.tree.reachable_end_states(node)
@@ -463,6 +461,14 @@ class BPWDamage(Damage):
         # interpolate using the usual linear formula
         damage = slope * (cemit - cemit_less) + d_less
         return damage
+
+    def _mitigation_cumulative_emissions_knots(self, period):
+        """Cumulative-emissions knots for constant mitigation scenarios."""
+        starting_stock = self.emit_baseline.CUMEMIT_2019
+        post_start_emissions = \
+            self.emit_baseline.baseline_cumemit_periods[period] - starting_stock
+        return starting_stock + (1 - np.asarray(self.mitigation_constants)) * \
+            post_start_emissions
 
     def average_mitigation(self, m, period, is_last=False):
         """Calculate the average mitigation for all nodes in a period.

@@ -123,19 +123,24 @@ class OutputUnpacker:
 
             ind = node - 31
 
-            self.emis_gtco2_full[ind, :], _ =\
-            self.emit_baseline.get_mitigated_baseline(self.m_opt_node,
-                                                      node=node,
-                                                      baseline='gtco2')
+            emissions, emission_times = \
+                self.emit_baseline.get_mitigated_baseline(
+                    self.m_opt_node, node=node, baseline='gtco2')
+            # Keep the right-hand value at duplicated policy boundaries when
+            # mapping the discontinuity-aware path back to the output grid.
+            keep = np.hstack((emission_times[:-1] != emission_times[1:], True))
+            output_times = self.emit_baseline.times[:self.emis_gtco2_full.shape[1]]
+            self.emis_gtco2_full[ind, :] = np.interp(
+                output_times, emission_times[keep], emissions[keep])
             self.emis_gtco2_path[ind, :] = self.emis_gtco2_full[ind,
                                                                 period_inds[:-1]]
-            mit_cumemit, _  =\
-            self.emit_baseline.get_mitigated_baseline(self.m_opt_node,
-                                                      node=node,
-                                                      baseline='cumemit')
+            mit_cumemit, cumulative_times = \
+                self.emit_baseline.get_mitigated_baseline(
+                    self.m_opt_node, node=node, baseline='cumemit')
 
-            self.temp_full[ind, :] = mit_cumemit\
-                                     * self.climate.TCRE_BEST_ESTIMATE
+            self.temp_full[ind, :] = np.interp(
+                output_times, cumulative_times, mit_cumemit) * \
+                self.climate.TCRE_BEST_ESTIMATE
             self.temp_path[ind, :] = self.temp_full[ind, period_inds[:-1]]
 
     def _make_econ_damages(self):
@@ -188,4 +193,3 @@ class OutputUnpacker:
             tmp_path = self.tree.get_path(node)
             path_array[node - 31, :] = array[tmp_path]
         return path_array
-

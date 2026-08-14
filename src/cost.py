@@ -120,12 +120,8 @@ class BPWCost(Cost):
         mitigation_cost = self.tau_0 * ((np.exp(self.power * m0) - 1)\
                           * self.power**(-1) -  m0)
 
-        # charge a premium for over-mitigating
-        over_mit = m0 > 1.0
-        if over_mit.any():
-            mitigation_cost[over_mit] = (self.tau_0 + self.backstop_premium)\
-                                      * ((np.exp(self.power * m0[over_mit])-1)\
-                                      * self.power**(-1) - m0[over_mit])
+        # Charge the backstop premium only for carbon removal (m > 1).
+        mitigation_cost += self.backstop_premium * np.maximum(m0 - 1.0, 0.0)
 
         c = (mitigation_cost * tech_term) / self.cons_per_ton
         return c
@@ -151,12 +147,9 @@ class BPWCost(Cost):
 
         tech_term = (1.0 - ((self.tech_const + self.tech_scale*ave_mitigation)\
                             / 100))**(years-10)
-        price = tech_term * self.tau_0 * (np.exp(mitigation*self.power) - 1)
-
-        # charge premium for over mitigating
-        over_mit = mitigation > 1.0
-        if over_mit.any():
-            price = tech_term * (self.tau_0 + self.backstop_premium)\
-                  * (np.exp(mitigation[over_mit]*self.power) - 1)
+        price = tech_term * (
+            self.tau_0 * (np.exp(mitigation*self.power) - 1)
+            + self.backstop_premium * (np.asarray(mitigation) > 1.0)
+        )
 
         return price

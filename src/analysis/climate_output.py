@@ -80,18 +80,13 @@ class ClimateOutput(object):
             years = tree.decision_times[period]
             period_years = tree.decision_times[period+1] - tree.decision_times[period]
             nodes = tree.get_nodes_in_period(period)
-            period_lens = tree.decision_times[:period+1]
-
             for node in range(nodes[0], nodes[1]+1):
-                path = np.array(tree.get_path(node))
-                new_m = m[path]
-                if node != 0:
-                    mean_mitigation = np.dot(new_m, period_lens) / years
-                else:
-                    mean_mitigation = 0.
+                mean_mitigation = \
+                    self.utility.damage.average_mitigation_node(
+                        m, node, period)
                 price = self.utility.cost.price(years, m[node], mean_mitigation)
                 self.prices[node] = price
-                self.ave_mitigations[node] = self.utility.damage.average_mitigation_node(m, node, period)
+                self.ave_mitigations[node] = mean_mitigation
 
             probs = tree.get_probs_in_period(period)
             self.expected_period_price[period] = np.dot(self.prices[nodes[0]:nodes[1]+1], probs)
