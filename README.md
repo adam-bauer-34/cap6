@@ -1,6 +1,6 @@
 # The Carbon Asset Pricing model -- AR6 (CAP6)
 
-Written by: Adam Michael Bauer
+Written by: Adam Michael Bauer & Theo Moers
 
 Affiliation: Department of Physics, University of Illinois at Urbana-Champaign, Loomis Laboratory, 1110 West Green St, Urbana, IL 61801, USA
 
