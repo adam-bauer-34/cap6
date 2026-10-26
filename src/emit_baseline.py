@@ -273,6 +273,35 @@ class BPWEmissionBaseline(EmissionBaseline):
         self.baseline_gtco2 = np.interp(self.times, time_appended,
                                           baseline_gtco2_appended)
 
+    def _decision_interval_samples(self, period, baseline):
+        """Return an emissions path with policy jumps at decision dates."""
+        raw_source = self.baseline_ppm if baseline == "ppm" else self.baseline_gtco2
+        if period == 0:
+            return (np.asarray(self.times[:1]), np.zeros(1, dtype=float),
+                    np.full(1, -1, dtype=int))
+
+        times = []
+        emissions = []
+        intervals = []
+        for interval in range(period):
+            low = self.dec_times_ind[interval]
+            high = self.dec_times_ind[interval + 1] + 1
+            times.append(self.times[low:high])
+            emissions.append(raw_source[low:high])
+            intervals.append(np.full(high-low, interval, dtype=int))
+        return (np.concatenate(times), np.concatenate(emissions),
+                np.concatenate(intervals))
+
+    @staticmethod
+    def _cumulative_trapezoid(integrand, times):
+        """Integrate while preserving duplicated decision-date samples."""
+        result = np.zeros_like(integrand, dtype=float)
+        if len(integrand) > 1:
+            result[1:] = np.cumsum(
+                0.5 * np.diff(times) * (integrand[:-1] + integrand[1:])
+            )
+        return result
+
     def get_mitigated_baseline(self, m, node=None, baseline="ppm",
                                is_last=False):
         """Calculate the mitigated version of a given baseline.
@@ -342,46 +371,16 @@ class BPWEmissionBaseline(EmissionBaseline):
             if is_last:
                 period += 1
 
-            # find path we've taken to get to current node
             path = self.tree.get_path(node)
-
-            # make mitigation for given path
-            mit = m[path]
-
-            # index of node time
-            node_time_index = self.dec_times_ind[period]
-
-            # make shifted indices to not include action at final node in
-            # baseline
-            shifted_inds = self.dec_times_ind.copy()
-            shifted_inds[1:] += 1
-
-            # truncate times that the mitigated baseline is evaluated at (this
-            # can be used for calculating the cumulative emissions after making
-            # the 
-            trunc_times = self.times[:node_time_index + 1]
-
-            # make empty mitigated baseline
-            mitigated_baseline = np.zeros_like(trunc_times, dtype = np.float32)
-
-            # fill in mitigated_baseline
-            for i in range(period):
-                tmp_ind_low = shifted_inds[i]
-                tmp_ind_high = shifted_inds[i+1]
-                try:
-                    mitigated_baseline[tmp_ind_low:tmp_ind_high] = \
-                            baseline_dict[tmp_baseline][tmp_ind_low:tmp_ind_high]\
-                            * (1 - mit[i])
-                except KeyError:
-                    print("Invalid baseline. Only 'ppm', 'gtco2', and 'cumemit'\
-                          are implemented.")
-                    raise
+            trunc_times, raw_baseline, intervals = \
+                self._decision_interval_samples(period, tmp_baseline)
+            controlling_nodes = path[intervals]
+            mitigated_baseline = raw_baseline * (1 - m[controlling_nodes])
 
             if baseline == 'cumemit':
                 mitigated_baseline = self.CUMEMIT_2019 + 10**(-3) * \
-                                     get_integral_var_ub(mitigated_baseline,
-                                                         trunc_times,
-                                                         trunc_times)
+                                     self._cumulative_trapezoid(
+                                         mitigated_baseline, trunc_times)
 
             return mitigated_baseline, trunc_times
 
@@ -389,7 +388,12 @@ class BPWEmissionBaseline(EmissionBaseline):
         # so just make that without the above headache
         else:
             try:
-                mitigated_baseline = baseline_dict[baseline] * (1 - m)
+                if baseline == 'cumemit':
+                    mitigated_baseline = self.CUMEMIT_2019 + 10**(-3) * \
+                        get_integral_var_ub(self.baseline_gtco2 * (1 - m),
+                                            self.times, self.times)
+                else:
+                    mitigated_baseline = baseline_dict[baseline] * (1 - m)
                 return mitigated_baseline
 
             except KeyError:
