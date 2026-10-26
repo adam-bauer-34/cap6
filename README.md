@@ -69,4 +69,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+## Author contributions
+AMB wrote the original codebase. TM improved the codebase by finding and fixing the set of four bugs summarized in PR1.
+
 
